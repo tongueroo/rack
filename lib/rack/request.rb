@@ -412,6 +412,8 @@ module Rack
       def form_data?
         type = media_type
         meth = get_header(RACK_METHODOVERRIDE_ORIGINAL_METHOD) || get_header(REQUEST_METHOD)
+        puts "form_data? type #{type}"
+        puts "form_data? meth #{meth}"
 
         (meth == POST && type.nil?) || FORM_DATA_MEDIA_TYPES.include?(type)
       end
@@ -441,8 +443,11 @@ module Rack
         if get_header(RACK_INPUT).nil?
           raise "Missing rack.input"
         elsif get_header(RACK_REQUEST_FORM_INPUT) == get_header(RACK_INPUT)
+          puts "POST 1"
           get_header(RACK_REQUEST_FORM_HASH)
         elsif form_data? || parseable_data?
+          puts "POST 2 form_data? #{form_data?}"
+          puts "POST 2 parseable_data? #{parseable_data?}"
           unless set_header(RACK_REQUEST_FORM_HASH, parse_multipart)
             form_vars = get_header(RACK_INPUT).read
 
