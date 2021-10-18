@@ -17,11 +17,11 @@ module Rack
       puts "env[REQUEST_METHOD] #{env[REQUEST_METHOD]}"
       if allowed_methods.include?(env[REQUEST_METHOD])
         puts "allowed_methods.include?(env[REQUEST_METHOD]) #{allowed_methods.include?(env[REQUEST_METHOD])}"
-        env.keys.sort.each do |k|
-          v = env[k]
-          next unless v.is_a?(String)
-          puts "#{k}: #{v}"
-        end
+        # env.keys.sort.each do |k|
+        #   v = env[k]
+        #   next unless v.is_a?(String)
+        #   puts "#{k}: #{v}"
+        # end
 
         method = method_override(env)
 
@@ -39,6 +39,11 @@ module Rack
 
     def method_override(env)
       req = Request.new(env)
+
+      puts "method_override_param(req) #{method_override_param(req)}"
+      puts "HTTP_METHOD_OVERRIDE_HEADER #{HTTP_METHOD_OVERRIDE_HEADER}"
+      puts "env[HTTP_METHOD_OVERRIDE_HEADER] #{env[HTTP_METHOD_OVERRIDE_HEADER]}"
+
       method = method_override_param(req) ||
         env[HTTP_METHOD_OVERRIDE_HEADER]
       begin
@@ -55,6 +60,8 @@ module Rack
     end
 
     def method_override_param(req)
+      puts "METHOD_OVERRIDE_PARAM_KEY #{METHOD_OVERRIDE_PARAM_KEY}"
+      puts "req.POST[METHOD_OVERRIDE_PARAM_KEY] #{req.POST[METHOD_OVERRIDE_PARAM_KEY]}"
       req.POST[METHOD_OVERRIDE_PARAM_KEY]
     rescue Utils::InvalidParameterError, Utils::ParameterTypeError
       req.get_header(RACK_ERRORS).puts "Invalid or incomplete POST params"
