@@ -14,7 +14,17 @@ module Rack
 
     def call(env)
       if allowed_methods.include?(env[REQUEST_METHOD])
+
+        Jets.logger.info "Rack::MethodOverride called"
+        env.keys.sort.each do |k|
+          v = env[k]
+          next unless v.is_a?(String)
+          puts "#{k}: #{v}"
+        end
+
         method = method_override(env)
+        puts "method #{method}"
+        puts "HTTP_METHODS.include?(method) #{HTTP_METHODS.include?(method)}"
         if HTTP_METHODS.include?(method)
           env[RACK_METHODOVERRIDE_ORIGINAL_METHOD] = env[REQUEST_METHOD]
           env[REQUEST_METHOD] = method
