@@ -13,8 +13,21 @@ module Rack
     end
 
     def call(env)
+      puts "Rack::MethodOverride called"
+      puts "env[REQUEST_METHOD] #{env[REQUEST_METHOD]}"
       if allowed_methods.include?(env[REQUEST_METHOD])
+        puts "allowed_methods.include?(env[REQUEST_METHOD]) #{allowed_methods.include?(env[REQUEST_METHOD])}"
+        env.keys.sort.each do |k|
+          v = env[k]
+          next unless v.is_a?(String)
+          puts "#{k}: #{v}"
+        end
+
         method = method_override(env)
+
+        puts "method #{method}"
+        puts "HTTP_METHODS.include?(method) #{HTTP_METHODS.include?(method)}"
+
         if HTTP_METHODS.include?(method)
           env[RACK_METHODOVERRIDE_ORIGINAL_METHOD] = env[REQUEST_METHOD]
           env[REQUEST_METHOD] = method
