@@ -17,11 +17,11 @@ module Rack
       puts "env[REQUEST_METHOD] #{env[REQUEST_METHOD]}"
       if allowed_methods.include?(env[REQUEST_METHOD])
         puts "allowed_methods.include?(env[REQUEST_METHOD]) #{allowed_methods.include?(env[REQUEST_METHOD])}"
-        # env.keys.sort.each do |k|
-        #   v = env[k]
-        #   next unless v.is_a?(String)
-        #   puts "#{k}: #{v}"
-        # end
+        env.keys.sort.each do |k|
+          v = env[k]
+          next unless v.is_a?(String)
+          puts "#{k}: #{v}"
+        end
 
         method = method_override(env)
 
